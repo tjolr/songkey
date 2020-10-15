@@ -1,26 +1,31 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import React, {Component, useState, useEffect} from 'react';
+import fire from './fire';
+import {ThemeProvider} from '@material-ui/core/styles';
+import CssBaseline from '@material-ui/core/CssBaseline';
+import theme from './theme';
+import MenuAppBar from './components/MenuAppBar/MenuAppBar';
+import {Container} from '@material-ui/core';
+import MainContainer from './components/MainContent/MainContainer';
 
-function App() {
+const App = () => {
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+    <div
+      style={{
+        background: 'url(https://wallpapercave.com/wp/wp214076.jpg)',
+        backgroundOrigin: 'center',
+        backgroundSize: 'cover',
+        height: '100vh',
+      }}
+    >
+      <ThemeProvider theme={theme}>
+        <CssBaseline />
+        <MenuAppBar />
+        <Container>
+          <MainContainer />
+        </Container>
+      </ThemeProvider>
     </div>
   );
-}
+};
 
 export default App;
