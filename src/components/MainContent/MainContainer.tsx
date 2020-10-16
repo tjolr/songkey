@@ -9,7 +9,14 @@ const useStyles = makeStyles((theme: Theme) =>
       display: 'flex',
       justifyContent: 'center',
       alignItems: 'center',
-      height: '80vh',
+      paddingBottom: theme.spacing(2),
+      [theme.breakpoints.down('sm')]: {
+        marginTop: theme.spacing(0),
+        minHeight: 'min-content',
+      },
+      [theme.breakpoints.up('md')]: {
+        height: '80vh',
+      },
     },
   })
 );
