@@ -1,7 +1,6 @@
-import React from 'react';
+import React, {useState} from 'react';
 import {createStyles, makeStyles, Theme} from '@material-ui/core/styles';
 import InputLabel from '@material-ui/core/InputLabel';
-import FormHelperText from '@material-ui/core/FormHelperText';
 import FormControl from '@material-ui/core/FormControl';
 import Select from '@material-ui/core/Select';
 import MenuItem from '@material-ui/core/MenuItem';
@@ -20,33 +19,17 @@ const useStyles = makeStyles((theme: Theme) =>
   })
 );
 
-export default function DropDownOriginKey() {
+const DropDownOriginKey = (props: any) => {
   const classes = useStyles();
   const theme = useTheme();
   const isMobileScreen = useMediaQuery(theme.breakpoints.down('sm'));
 
-  const [age, setAge] = React.useState('');
-
-  const [state, setState] = React.useState<{
-    age: string | number;
-    name: string;
-  }>({
-    age: '',
-    name: 'hai',
-  });
-
-  const handleChangeNative = (
-    event: React.ChangeEvent<{name?: string; value: unknown}>
-  ) => {
-    const name = event.target.name as keyof typeof state;
-    setState({
-      ...state,
-      [name]: event.target.value,
-    });
-  };
+  const [currentKey, setCurrentKey] = useState('C');
 
   const handleChange = (event: React.ChangeEvent<{value: unknown}>) => {
-    setAge(event.target.value as string);
+    const keyVal = event.target.value as string;
+    props.handleKeyChange(keyVal);
+    setCurrentKey(keyVal);
   };
 
   return (
@@ -56,10 +39,9 @@ export default function DropDownOriginKey() {
           <InputLabel htmlFor="outlined-age-native-simple">Key</InputLabel>
           <Select
             native
-            value={state.age}
-            onChange={handleChangeNative}
-            style={{fontSize: '150%'}}
-            label="Age"
+            value={currentKey}
+            onChange={handleChange}
+            label="Key"
             inputProps={{
               name: 'age',
               id: 'outlined-age-native-simple',
@@ -85,9 +67,14 @@ export default function DropDownOriginKey() {
           <Select
             labelId="demo-simple-select-outlined-label"
             id="demo-simple-select-outlined"
-            value={age}
+            value={currentKey}
             onChange={handleChange}
-            label="Age"
+            label="Key"
+            inputProps={{
+              input: {
+                fontSize: '200%',
+              },
+            }}
           >
             <MenuItem value={'C'}>C</MenuItem>
             <MenuItem value={'C#'}>C#</MenuItem>
@@ -106,4 +93,6 @@ export default function DropDownOriginKey() {
       )}
     </div>
   );
-}
+};
+
+export default DropDownOriginKey;

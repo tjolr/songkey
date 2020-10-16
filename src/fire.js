@@ -1,4 +1,6 @@
 import firebase from 'firebase';
+import 'firebase/analytics';
+
 var config = {
   apiKey: 'AIzaSyCNXAmbkxVoa7LP86D3fnFW9i5gpjqDSjc',
   authDomain: 'songkey-p407.firebaseapp.com',
@@ -9,5 +11,9 @@ var config = {
   appId: '1:791467482041:web:30ba30283dc9d4beafb468',
   measurementId: 'G-SLTXR3MSC8',
 };
-var fire = firebase.initializeApp (config);
-export default fire;
+if (typeof window != 'undefined' && !firebase.apps.length) {
+  firebase.initializeApp (config);
+  if ('measurementId' in config) firebase.analytics ();
+}
+
+export default firebase;

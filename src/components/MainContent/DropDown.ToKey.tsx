@@ -1,11 +1,8 @@
-import React from 'react';
+import React, {useEffect, useState} from 'react';
 import {createStyles, makeStyles, Theme} from '@material-ui/core/styles';
-import InputLabel from '@material-ui/core/InputLabel';
-import FormHelperText from '@material-ui/core/FormHelperText';
-import FormControl from '@material-ui/core/FormControl';
-import Select from '@material-ui/core/Select';
-import NativeSelect from '@material-ui/core/NativeSelect';
 import ToKeyRow from './ToKeyRow';
+import {getSongKeysListFromKey, SongKey} from '../../services/SongKey.service';
+import {motion, AnimatePresence} from 'framer-motion';
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -15,56 +12,48 @@ const useStyles = makeStyles((theme: Theme) =>
   })
 );
 
-export default function DropDownToKey() {
+const DropDownToKey = (props: any) => {
   const classes = useStyles();
-  const songKeysTable = [
-    {
-      recommended: true,
-      songKey: 'C',
-      number: 'v',
-    },
-    {
-      recommended: false,
-      songKey: 'A',
-      number: 'VI',
-    },
-    {
-      recommended: true,
-      songKey: 'B',
-      number: 'V',
-    },
-    {
-      recommended: true,
-      songKey: 'C',
-      number: 'I',
-    },
-    {
-      recommended: false,
-      songKey: 'C',
-      number: 'II',
-    },
-    {
-      recommended: true,
-      songKey: 'B',
-      number: 'V',
-    },
-    {
-      recommended: true,
-      songKey: 'C',
-      number: 'I',
-    },
-    {
-      recommended: false,
-      songKey: 'C',
-      number: 'II',
-    },
-  ];
+
+  const [songKeysList, setSongKeysList] = useState<SongKey[]>([]);
+
+  useEffect(() => {
+    const songList = getSongKeysListFromKey(props.currentKey);
+    setSongKeysList(songList);
+  }, [props.currentKey, props.onlyShowRecommended]);
 
   return (
     <div className={classes.root}>
-      {songKeysTable.map(keyTable => (
-        <ToKeyRow recommended={keyTable.recommended} keyTable={keyTable} />
-      ))}
+      {props.onlyShowRecommended
+        ? songKeysList
+            .filter(songKey => songKey.match > 0)
+            .map(songKey => (
+              <AnimatePresence exitBeforeEnter key={songKey.number}>
+                <motion.div
+                  initial={{y: 10, opacity: 0}}
+                  animate={{y: 0, opacity: 1}}
+                  transition={{duration: 0.15}}
+                  exit={{opacity: 0, x: 20}}
+                  key={Math.random()}
+                >
+                  <ToKeyRow songKey={songKey} />
+                </motion.div>
+              </AnimatePresence>
+            ))
+        : songKeysList.map(songKey => (
+            <AnimatePresence exitBeforeEnter key={songKey.number}>
+              <motion.div
+                initial={{y: 10, opacity: 0}}
+                animate={{y: 0, opacity: 1}}
+                transition={{duration: 0.15}}
+                exit={{opacity: 0, x: 20}}
+                key={Math.random()}
+              >
+                <ToKeyRow songKey={songKey} />
+              </motion.div>
+            </AnimatePresence>
+          ))}
     </div>
   );
-}
+};
+export default DropDownToKey;
