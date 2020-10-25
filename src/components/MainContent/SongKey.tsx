@@ -1,16 +1,19 @@
 import React, {useState, useEffect} from 'react';
-import {motion, AnimatePresence} from 'framer-motion';
+import {motion, AnimatePresence, AnimateSharedLayout} from 'framer-motion';
 import {Typography} from '@material-ui/core';
 import DropDownOriginKey from './DropDown.OriginKey';
 import {Theme, createStyles, makeStyles} from '@material-ui/core/styles';
 import DropDownToKey from './DropDown.ToKey';
 import FiltersSection from './FiltersSection';
+import Icon from '@material-ui/core/Icon';
+import {list, item} from '../../animations/animations';
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
     root: {
       display: 'flex',
       alignItems: 'center',
+      minHeight: '40vh',
     },
     rootItem: {
       flex: 1,
@@ -19,23 +22,33 @@ const useStyles = makeStyles((theme: Theme) =>
     },
     titles: {
       display: 'flex',
-      gap: '.5rem',
+      marginBottom: theme.spacing(1),
     },
     titleItem: {
       display: 'inline-block',
-      textAlign: 'left',
+      textAlign: 'center',
       flex: 1,
-      marginBottom: theme.spacing(1),
-      marginLeft: '.2rem',
-      marginRight: '.2rem',
       backgroundColor: '#535353b7',
       borderRadius: '6px',
       paddingLeft: theme.spacing(1),
       paddingTop: theme.spacing(0.4),
       paddingBottom: theme.spacing(0.4),
+      '&:first-child': {
+        marginRight: theme.spacing(1),
+      },
+      '&:last-child': {
+        marginLeft: theme.spacing(1),
+      },
+    },
+    switchIcon: {
+      display: 'flex',
+      alignItems: 'center',
+      '&:hover': {
+        cursor: 'pointer',
+      },
     },
     filters: {
-      marginTop: theme.spacing(2),
+      marginTop: theme.spacing(1),
     },
   })
 );
@@ -45,6 +58,8 @@ const SongKey = () => {
 
   const [currentKey, setCurrentKey] = useState('C');
   const [onlyShowRecommended, setOnlyShowRecommended] = useState(false);
+  const [switchFromKey, setSwitchFromKey] = useState(false);
+  const [toggleButtonRotate, setToggleButtonRotate] = useState(0);
 
   const handleKeyChange = (key: string): void => {
     setCurrentKey(key);
@@ -54,35 +69,29 @@ const SongKey = () => {
     setOnlyShowRecommended(recommended);
   };
 
-  const list = {
-    visible: {
-      opacity: 1,
-      transition: {
-        when: 'beforeChildren',
-        staggerChildren: 0.3,
-      },
-    },
-    hidden: {
-      opacity: 0,
-      transition: {
-        when: 'afterChildren',
-      },
-    },
-  };
-
-  const item = {
-    visible: {opacity: 1, y: 0},
-    hidden: {opacity: 0, y: 30},
+  const handleSwitchFromKey = (): void => {
+    setToggleButtonRotate(toggleButtonRotate + 180);
+    setSwitchFromKey(!switchFromKey);
   };
 
   return (
     <div>
       <div className={classes.titles}>
         <Typography variant="subtitle1" className={classes.titleItem}>
-          Origin key:
+          From key:
         </Typography>
+        <motion.div
+          whileHover={{scale: 1.2}}
+          whileTap={{scale: 0.8}}
+          animate={{rotate: toggleButtonRotate, opacity: 1}}
+          transition={{duration: 0.3}}
+          className={classes.switchIcon}
+          onClick={handleSwitchFromKey}
+        >
+          <Icon>switch_left</Icon>
+        </motion.div>
         <Typography variant="subtitle1" className={classes.titleItem}>
-          Transitions:
+          To key:
         </Typography>
       </div>
       <motion.div
@@ -90,15 +99,21 @@ const SongKey = () => {
         animate="visible"
         variants={list}
         className={classes.root}
+        style={
+          switchFromKey
+            ? {flexDirection: 'row-reverse'}
+            : {flexDirection: 'row'}
+        }
       >
-        <motion.div variants={item} className={classes.rootItem}>
+        <motion.div layout variants={item} className={classes.rootItem}>
           <DropDownOriginKey handleKeyChange={handleKeyChange} />
         </motion.div>
 
-        <motion.div variants={item} className={classes.rootItem}>
+        <motion.div layout variants={item} className={classes.rootItem}>
           <DropDownToKey
             currentKey={currentKey}
             onlyShowRecommended={onlyShowRecommended}
+            switchFromKey={switchFromKey}
           />
         </motion.div>
       </motion.div>

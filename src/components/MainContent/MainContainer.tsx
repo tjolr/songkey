@@ -2,6 +2,7 @@ import React from 'react';
 import {Container} from '@material-ui/core';
 import MainSection from './MainSection';
 import {Theme, createStyles, makeStyles} from '@material-ui/core/styles';
+import {motion} from 'framer-motion';
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -25,9 +26,9 @@ const MainContainer = () => {
   const classes = useStyles();
 
   return (
-    <div className={classes.root}>
+    <motion.div className={classes.root}>
       <MainSection />
-    </div>
+    </motion.div>
   );
 };
 
