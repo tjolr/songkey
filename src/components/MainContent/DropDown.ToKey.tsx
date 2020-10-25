@@ -2,7 +2,7 @@ import React, {useEffect, useState} from 'react';
 import {createStyles, makeStyles, Theme} from '@material-ui/core/styles';
 import ToKeyRow from './ToKeyRow';
 import {getSongKeysListFromKey, SongKey} from '../../services/SongKey.service';
-import {motion, AnimatePresence} from 'framer-motion';
+import {motion, AnimatePresence, useAnimation} from 'framer-motion';
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -16,44 +16,86 @@ const DropDownToKey = (props: any) => {
   const classes = useStyles();
 
   const [songKeysList, setSongKeysList] = useState<SongKey[]>([]);
+  const [activeSoundKey, setActiveSoundKey] = useState('');
+  const keyRowControls = useAnimation();
+  const animExitTimeMS = 300;
+
+  const startActiveSoundKey = (key: string) => {
+    setActiveSoundKey(key);
+    setTimeout(() => setActiveSoundKey(''), 2000);
+  };
+
+  const animRowKeyChange = async () => {
+    await keyRowControls.start({
+      opacity: 0,
+      transition: {duration: animExitTimeMS / 1000},
+    });
+    await keyRowControls.set({
+      opacity: 0,
+      y: 20,
+    });
+    await keyRowControls.start({
+      opacity: 1,
+      y: 0,
+      transition: {duration: 0.25},
+    });
+  };
+
+  const fetchNewSongKeys = (switchFromKey: boolean) => {
+    const songList = getSongKeysListFromKey(props.currentKey, switchFromKey);
+    setTimeout(() => {
+      setSongKeysList(songList);
+    }, animExitTimeMS);
+  };
 
   useEffect(() => {
-    const songList = getSongKeysListFromKey(props.currentKey);
-    setSongKeysList(songList);
-  }, [props.currentKey, props.onlyShowRecommended]);
+    animRowKeyChange();
+    fetchNewSongKeys(props.switchFromKey);
+  }, [props.currentKey]);
+
+  const animSwitchFromKey = async () => {
+    await keyRowControls.start({
+      opacity: 0,
+      scale: 0,
+      transition: {duration: 0.15},
+    });
+    await keyRowControls.set({
+      scale: 0,
+    });
+    await keyRowControls.start({
+      opacity: 1,
+      scale: 1,
+      transition: {duration: 0.5},
+    });
+  };
+  useEffect(() => {
+    animSwitchFromKey();
+    fetchNewSongKeys(props.switchFromKey);
+  }, [props.switchFromKey]);
 
   return (
-    <div className={classes.root}>
-      {props.onlyShowRecommended
-        ? songKeysList
-            .filter(songKey => songKey.match > 0)
-            .map(songKey => (
-              <AnimatePresence exitBeforeEnter key={songKey.number}>
-                <motion.div
-                  initial={{y: 10, opacity: 0}}
-                  animate={{y: 0, opacity: 1}}
-                  transition={{duration: 0.15}}
-                  exit={{opacity: 0, x: 20}}
-                  key={Math.random()}
-                >
-                  <ToKeyRow songKey={songKey} />
-                </motion.div>
-              </AnimatePresence>
-            ))
-        : songKeysList.map(songKey => (
-            <AnimatePresence exitBeforeEnter key={songKey.number}>
-              <motion.div
-                initial={{y: 10, opacity: 0}}
-                animate={{y: 0, opacity: 1}}
-                transition={{duration: 0.15}}
-                exit={{opacity: 0, x: 20}}
-                key={Math.random()}
-              >
-                <ToKeyRow songKey={songKey} />
-              </motion.div>
-            </AnimatePresence>
+    <AnimatePresence exitBeforeEnter>
+      <motion.div
+        layout
+        animate={keyRowControls}
+        className={classes.root}
+        exit={{opacity: 0}}
+      >
+        {songKeysList
+          .filter(songKey =>
+            props.onlyShowRecommended ? songKey.match > 0 : songKey.match > -1
+          )
+          .map(songKey => (
+            <ToKeyRow
+              key={Math.random()}
+              songKey={songKey}
+              startActiveSoundKey={startActiveSoundKey}
+              activeSoundKey={activeSoundKey}
+              switchFromKey={props.switchFromKey}
+            />
           ))}
-    </div>
+      </motion.div>
+    </AnimatePresence>
   );
 };
 export default DropDownToKey;
