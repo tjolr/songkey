@@ -1,9 +1,16 @@
 import React from 'react';
 
 export interface SongKey {
-  match: number;
+  match: TransitionMatch;
   songKey: string;
   number: string;
+}
+
+export enum TransitionMatch {
+  Smooth = 'Smooth',
+  Noticeable = 'Noticeable',
+  Tricky = 'Tricky',
+  Unrecommended = 'Avoid',
 }
 
 const notesList: string[] = [
@@ -23,23 +30,48 @@ const notesList: string[] = [
 
 const chordNumberIndexListToKey: any[] = [
   {number: 'I', index: 0},
+  {number: 'bI', index: 1},
   {number: 'II', index: 2},
+  {number: 'bIII', index: 3},
   {number: 'III', index: 4},
   {number: 'IV', index: 5},
+  {number: 'bV', index: 6},
   {number: 'V', index: 7},
+  {number: 'bVI', index: 8},
   {number: 'VI', index: 9},
+  {number: 'bVII', index: 10},
   {number: 'VII', index: 11},
 ];
 
 const chordNumberIndexListFromKey: any[] = [
   {number: 'I', index: 0},
-  {number: 'II', index: 11},
-  {number: 'III', index: 9},
+  {number: 'bI', index: 11},
+  {number: 'II', index: 10},
+  {number: 'bIII', index: 9},
+  {number: 'III', index: 8},
   {number: 'IV', index: 7},
+  {number: 'bV', index: 6},
   {number: 'V', index: 5},
-  {number: 'VI', index: 4},
-  {number: 'VII', index: 2},
+  {number: 'bVI', index: 4},
+  {number: 'VI', index: 3},
+  {number: 'bVII', index: 2},
+  {number: 'VII', index: 1},
 ];
+
+const numberTransitionsMatch = {
+  I: TransitionMatch.Smooth,
+  bI: TransitionMatch.Unrecommended,
+  II: TransitionMatch.Unrecommended,
+  bIII: TransitionMatch.Noticeable,
+  III: TransitionMatch.Tricky,
+  IV: TransitionMatch.Smooth,
+  bV: TransitionMatch.Unrecommended,
+  V: TransitionMatch.Tricky,
+  bVI: TransitionMatch.Noticeable,
+  VI: TransitionMatch.Tricky,
+  bVII: TransitionMatch.Unrecommended,
+  VII: TransitionMatch.Unrecommended,
+};
 
 // fram: G til C, D
 // tilbake: C fra F, G
@@ -57,17 +89,10 @@ export const getSongKeysListFromKey = (key: string, switchFromKey: boolean) => {
     const keyToAdd =
       notesList[(currentItem.index + keyIndexInNotesList) % notesList.length];
 
-    let match: number = 0;
-    if (currentItem.number === 'I') {
-      match = 1;
-    } else if (currentItem.number === 'V' || currentItem.number === 'IV') {
-      match = 2;
-    }
-
     songKeyList.push({
       songKey: keyToAdd,
       number: currentItem.number,
-      match: match,
+      match: numberTransitionsMatch[currentItem.number],
     });
   });
   return songKeyList;

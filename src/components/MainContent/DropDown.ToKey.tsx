@@ -1,7 +1,11 @@
 import React, {useEffect, useState} from 'react';
 import {createStyles, makeStyles, Theme} from '@material-ui/core/styles';
 import ToKeyRow from './ToKeyRow';
-import {getSongKeysListFromKey, SongKey} from '../../services/SongKey.service';
+import {
+  getSongKeysListFromKey,
+  SongKey,
+  TransitionMatch,
+} from '../../services/SongKey.service';
 import {motion, AnimatePresence, useAnimation} from 'framer-motion';
 
 const useStyles = makeStyles((theme: Theme) =>
@@ -83,7 +87,9 @@ const DropDownToKey = (props: any) => {
       >
         {songKeysList
           .filter(songKey =>
-            props.onlyShowRecommended ? songKey.match > 0 : songKey.match > -1
+            props.onlyShowRecommended
+              ? songKey.match !== TransitionMatch.Unrecommended
+              : songKey
           )
           .map(songKey => (
             <ToKeyRow

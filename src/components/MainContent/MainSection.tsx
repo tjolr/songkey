@@ -8,14 +8,19 @@ const useStyles = makeStyles((theme: Theme) =>
   createStyles({
     root: {
       color: 'white',
-      backgroundColor: '#323232D9',
-      padding: theme.spacing(1.5),
+      backgroundColor: '#323232F2',
       borderRadius: '10px',
-      [theme.breakpoints.down('sm')]: {
-        minWidth: '95vw',
+      [theme.breakpoints.down('xs')]: {
+        padding: theme.spacing(0.5),
+        minWidth: '100vw',
+      },
+      [theme.breakpoints.up('sm')]: {
+        padding: theme.spacing(1),
+        minWidth: '65vw',
       },
       [theme.breakpoints.up('md')]: {
-        minWidth: '35vw',
+        padding: theme.spacing(1.5),
+        minWidth: '40vw',
       },
     },
     title: {
