@@ -1,14 +1,17 @@
 import React from 'react';
 import Icon from '@material-ui/core/Icon';
 import {Theme, createStyles, makeStyles} from '@material-ui/core/styles';
-import {TransitionMatch} from '../../services/SongKey.service';
-import classes from '*.module.sass';
+import {TransitionMatch} from '../../../../../services/SongKey.service';
 import {Typography} from '@material-ui/core';
 import {red, yellow, blue, green} from '@material-ui/core/colors';
 import clsx from 'clsx';
 import Grid from '@material-ui/core/Grid';
 import {useTheme} from '@material-ui/core/styles';
-import {responsiveIcon} from '../../styles/generic';
+import {responsiveIcon} from '../../../../../styles/generic';
+import CheckCircleIcon from '@material-ui/icons/CheckCircle';
+import PanToolIcon from '@material-ui/icons/PanTool';
+import HearingIcon from '@material-ui/icons/Hearing';
+import ThumbDownIcon from '@material-ui/icons/ThumbDown';
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -52,6 +55,7 @@ const TransitionChip = (props: any) => {
   const classes = useStyles();
   const theme = useTheme();
   const isMobile = theme.breakpoints.down('sm');
+
   return (
     <div>
       {props.match === TransitionMatch.Smooth ? (
@@ -62,16 +66,21 @@ const TransitionChip = (props: any) => {
             alignItems="center"
             justify="flex-end"
           >
-            <Typography variant="caption" className={classes.match}>
+            <Typography
+              variant={props.detailView ? 'h5' : 'caption'}
+              className={classes.match}
+            >
               {props.match}
             </Typography>
-            <Icon
+            <CheckCircleIcon
               style={{
-                fontSize: isMobile ? responsiveIcon.sm : responsiveIcon.md,
+                fontSize: props.detailView
+                  ? responsiveIcon.xl
+                  : isMobile
+                  ? responsiveIcon.sm
+                  : responsiveIcon.md,
               }}
-            >
-              check_circle
-            </Icon>
+            />
           </Grid>
         </div>
       ) : props.match === TransitionMatch.Tricky ? (
@@ -82,16 +91,21 @@ const TransitionChip = (props: any) => {
             alignItems="center"
             justify="flex-end"
           >
-            <Typography variant="caption" className={classes.match}>
+            <Typography
+              variant={props.detailView ? 'h5' : 'caption'}
+              className={classes.match}
+            >
               {props.match}
             </Typography>
-            <Icon
+            <PanToolIcon
               style={{
-                fontSize: isMobile ? responsiveIcon.sm : responsiveIcon.md,
+                fontSize: props.detailView
+                  ? responsiveIcon.xl
+                  : isMobile
+                  ? responsiveIcon.sm
+                  : responsiveIcon.md,
               }}
-            >
-              pan_tool
-            </Icon>
+            />
           </Grid>
         </div>
       ) : props.match === TransitionMatch.Noticeable ? (
@@ -102,16 +116,21 @@ const TransitionChip = (props: any) => {
             alignItems="center"
             justify="flex-end"
           >
-            <Typography variant="caption" className={classes.match}>
+            <Typography
+              variant={props.detailView ? 'h5' : 'caption'}
+              className={classes.match}
+            >
               {props.match}
             </Typography>
-            <Icon
+            <HearingIcon
               style={{
-                fontSize: isMobile ? responsiveIcon.sm : responsiveIcon.md,
+                fontSize: props.detailView
+                  ? responsiveIcon.xl
+                  : isMobile
+                  ? responsiveIcon.sm
+                  : responsiveIcon.md,
               }}
-            >
-              hearing
-            </Icon>{' '}
+            />
           </Grid>
         </div>
       ) : (
@@ -122,16 +141,21 @@ const TransitionChip = (props: any) => {
             alignItems="center"
             justify="flex-end"
           >
-            <Typography variant="caption" className={classes.match}>
+            <Typography
+              variant={props.detailView ? 'h5' : 'caption'}
+              className={classes.match}
+            >
               {props.match}
             </Typography>
-            <Icon
+            <ThumbDownIcon
               style={{
-                fontSize: isMobile ? responsiveIcon.sm : responsiveIcon.md,
+                fontSize: props.detailView
+                  ? responsiveIcon.xl
+                  : isMobile
+                  ? responsiveIcon.sm
+                  : responsiveIcon.md,
               }}
-            >
-              thumb_down
-            </Icon>{' '}
+            />
           </Grid>
         </div>
       )}

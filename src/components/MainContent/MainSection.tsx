@@ -2,7 +2,7 @@ import React from 'react';
 import {Theme, createStyles, makeStyles} from '@material-ui/core/styles';
 import {motion} from 'framer-motion';
 import {Typography} from '@material-ui/core';
-import SongKey from './SongKey';
+import TransitionKey from './TransitionKeySection/TransitionKey';
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -41,7 +41,7 @@ export default function MainSection() {
       transition={{duration: 0.2}}
       className={classes.root}
     >
-      <SongKey />
+      <TransitionKey />
     </motion.div>
   );
 }

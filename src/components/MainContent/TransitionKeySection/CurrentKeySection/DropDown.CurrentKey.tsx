@@ -6,6 +6,8 @@ import Select from '@material-ui/core/Select';
 import MenuItem from '@material-ui/core/MenuItem';
 import {useTheme} from '@material-ui/core/styles';
 import useMediaQuery from '@material-ui/core/useMediaQuery';
+import {useSelector, useDispatch} from 'react-redux';
+import {updateCurrentKey} from '../../../../redux/actions';
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -19,17 +21,19 @@ const useStyles = makeStyles((theme: Theme) =>
   })
 );
 
-const DropDownOriginKey = (props: any) => {
+const DropDownCurrentKey = (props: any) => {
   const classes = useStyles();
   const theme = useTheme();
   const isMobileScreen = useMediaQuery(theme.breakpoints.down('sm'));
+  const dispatch = useDispatch();
 
-  const [currentKey, setCurrentKey] = useState('C');
+  const currentKeyRedux = useSelector(
+    state => state.transitionKeyReducer.currentKey
+  );
 
   const handleChange = (event: React.ChangeEvent<{value: unknown}>) => {
     const keyVal = event.target.value as string;
-    props.handleKeyChange(keyVal);
-    setCurrentKey(keyVal);
+    dispatch(updateCurrentKey(keyVal));
   };
 
   return (
@@ -39,7 +43,7 @@ const DropDownOriginKey = (props: any) => {
           <InputLabel htmlFor="outlined-age-native-simple">Key</InputLabel>
           <Select
             native
-            value={currentKey}
+            value={currentKeyRedux}
             onChange={handleChange}
             label="Key"
             inputProps={{
@@ -67,7 +71,7 @@ const DropDownOriginKey = (props: any) => {
           <Select
             labelId="demo-simple-select-outlined-label"
             id="demo-simple-select-outlined"
-            value={currentKey}
+            value={currentKeyRedux}
             onChange={handleChange}
             label="Key"
             inputProps={{
@@ -95,4 +99,4 @@ const DropDownOriginKey = (props: any) => {
   );
 };
 
-export default DropDownOriginKey;
+export default DropDownCurrentKey;

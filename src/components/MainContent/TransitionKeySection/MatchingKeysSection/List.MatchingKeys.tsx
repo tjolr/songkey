@@ -1,12 +1,13 @@
 import React, {useEffect, useState} from 'react';
 import {createStyles, makeStyles, Theme} from '@material-ui/core/styles';
-import ToKeyRow from './ToKeyRow';
+import ToKeyRow from './MatchingKeyItemSection/MatchingKeyItem';
 import {
   getSongKeysListFromKey,
   SongKey,
   TransitionMatch,
-} from '../../services/SongKey.service';
+} from '../../../../services/SongKey.service';
 import {motion, AnimatePresence, useAnimation} from 'framer-motion';
+import {useSelector} from 'react-redux';
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -20,19 +21,21 @@ const DropDownToKey = (props: any) => {
   const classes = useStyles();
 
   const [songKeysList, setSongKeysList] = useState<SongKey[]>([]);
-  const [activeSoundKey, setActiveSoundKey] = useState('');
-  const keyRowControls = useAnimation();
-  const animExitTimeMS = 300;
+  const currentKeyRedux = useSelector(
+    state => state.transitionKeyReducer.currentKey
+  );
+  const switchFromKeyRedux = useSelector(
+    state => state.transitionKeyReducer.switchFromKey
+  );
 
-  const startActiveSoundKey = (key: string) => {
-    setActiveSoundKey(key);
-    setTimeout(() => setActiveSoundKey(''), 2000);
-  };
+  const keyRowControls = useAnimation();
+  const animRowKeyExitTimeMS = 400;
+  const animSwitchFromKeyExitTimeMS = 150;
 
   const animRowKeyChange = async () => {
     await keyRowControls.start({
       opacity: 0,
-      transition: {duration: animExitTimeMS / 1000},
+      transition: {duration: animRowKeyExitTimeMS / 1000},
     });
     await keyRowControls.set({
       opacity: 0,
@@ -45,8 +48,11 @@ const DropDownToKey = (props: any) => {
     });
   };
 
-  const fetchNewSongKeys = (switchFromKey: boolean) => {
-    const songList = getSongKeysListFromKey(props.currentKey, switchFromKey);
+  const fetchNewSongKeys = (animExitTimeMS: number) => {
+    const songList = getSongKeysListFromKey(
+      currentKeyRedux,
+      switchFromKeyRedux
+    );
     setTimeout(() => {
       setSongKeysList(songList);
     }, animExitTimeMS);
@@ -54,14 +60,14 @@ const DropDownToKey = (props: any) => {
 
   useEffect(() => {
     animRowKeyChange();
-    fetchNewSongKeys(props.switchFromKey);
-  }, [props.currentKey]);
+    fetchNewSongKeys(animRowKeyExitTimeMS);
+  }, [currentKeyRedux]);
 
   const animSwitchFromKey = async () => {
     await keyRowControls.start({
       opacity: 0,
       scale: 0,
-      transition: {duration: 0.15},
+      transition: {duration: animSwitchFromKeyExitTimeMS / 1000},
     });
     await keyRowControls.set({
       scale: 0,
@@ -74,8 +80,8 @@ const DropDownToKey = (props: any) => {
   };
   useEffect(() => {
     animSwitchFromKey();
-    fetchNewSongKeys(props.switchFromKey);
-  }, [props.switchFromKey]);
+    fetchNewSongKeys(animSwitchFromKeyExitTimeMS);
+  }, [switchFromKeyRedux]);
 
   return (
     <AnimatePresence exitBeforeEnter>
@@ -95,8 +101,6 @@ const DropDownToKey = (props: any) => {
             <ToKeyRow
               key={Math.random()}
               songKey={songKey}
-              startActiveSoundKey={startActiveSoundKey}
-              activeSoundKey={activeSoundKey}
               switchFromKey={props.switchFromKey}
             />
           ))}

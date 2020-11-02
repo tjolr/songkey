@@ -6,14 +6,16 @@ import {Typography, IconButton} from '@material-ui/core';
 import TransitionChip from './TransitionChip';
 import {red, yellow, blue, green} from '@material-ui/core/colors';
 import clsx from 'clsx';
-import {TransitionMatch} from '../../services/SongKey.service';
+import {TransitionMatch} from '../../../../../services/SongKey.service';
 import {fade} from '@material-ui/core/styles/colorManipulator';
 import Grid from '@material-ui/core/Grid';
 import {useTheme} from '@material-ui/core/styles';
 import useMediaQuery from '@material-ui/core/useMediaQuery';
 import TransitionDetails from './Dialog.TransitionDetails';
 import Icon from '@material-ui/core/Icon';
-import {useIconStyles, responsiveIcon} from '../../styles/generic';
+import {useIconStyles, responsiveIcon} from '../../../../../styles/generic';
+import MoreVertIcon from '@material-ui/icons/MoreVert';
+import MoreHorizIcon from '@material-ui/icons/MoreHoriz';
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -115,14 +117,17 @@ const ToKeyRow = (props: any) => {
       <TransitionDetails
         open={detailOpen}
         handleDetailClose={handleDetailClose}
+        match={props.songKey.match}
       />
       <IconButton onClick={handleDetailOpen} className={iconClasses.iconButton}>
-        <Icon
+        <MoreHorizIcon
           className={classes.icon}
           style={{fontSize: isMobile ? responsiveIcon.sm : responsiveIcon.md}}
+        />
+        {/*  <Icon
         >
           insights
-        </Icon>
+        </Icon> */}
       </IconButton>
 
       <div

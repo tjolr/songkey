@@ -1,12 +1,15 @@
 import React, {useState, useEffect} from 'react';
 import {motion, AnimatePresence, AnimateSharedLayout} from 'framer-motion';
 import {Typography} from '@material-ui/core';
-import DropDownOriginKey from './DropDown.OriginKey';
+import DropDownCurrentKey from './CurrentKeySection/DropDown.CurrentKey';
 import {Theme, createStyles, makeStyles} from '@material-ui/core/styles';
-import DropDownToKey from './DropDown.ToKey';
-import FiltersSection from './FiltersSection';
+import DropDownToKey from './MatchingKeysSection/List.MatchingKeys';
+import FiltersSection from '../FiltersSection';
 import Icon from '@material-ui/core/Icon';
-import {list, item} from '../../animations/animations';
+import {list, item} from '../../../animations/animations';
+import {useSelector, useDispatch} from 'react-redux';
+import {updateSwitchFromKey} from '../../../redux/actions';
+import SwapHorizIcon from '@material-ui/icons/SwapHoriz';
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -53,25 +56,26 @@ const useStyles = makeStyles((theme: Theme) =>
   })
 );
 
-const SongKey = () => {
+const TransitionKey = () => {
   const classes = useStyles();
+  const dispatch = useDispatch();
+  const switchFromKeyRedux = useSelector(
+    state => state.transitionKeyReducer.switchFromKey
+  );
+  const currentKeyRedux = useSelector(
+    state => state.transitionKeyReducer.currentKey
+  );
 
-  const [currentKey, setCurrentKey] = useState('C');
   const [onlyShowRecommended, setOnlyShowRecommended] = useState(false);
-  const [switchFromKey, setSwitchFromKey] = useState(false);
   const [toggleButtonRotate, setToggleButtonRotate] = useState(0);
-
-  const handleKeyChange = (key: string): void => {
-    setCurrentKey(key);
-  };
 
   const handleShowRecommendedChange = (recommended: boolean): void => {
     setOnlyShowRecommended(recommended);
   };
 
   const handleSwitchFromKey = (): void => {
+    dispatch(updateSwitchFromKey(!switchFromKeyRedux));
     setToggleButtonRotate(toggleButtonRotate + 180);
-    setSwitchFromKey(!switchFromKey);
   };
 
   return (
@@ -88,7 +92,7 @@ const SongKey = () => {
           className={classes.switchIcon}
           onClick={handleSwitchFromKey}
         >
-          <Icon>switch_left</Icon>
+          <SwapHorizIcon />
         </motion.div>
         <Typography variant="subtitle1" className={classes.titleItem}>
           To key:
@@ -100,20 +104,20 @@ const SongKey = () => {
         variants={list}
         className={classes.root}
         style={
-          switchFromKey
+          switchFromKeyRedux
             ? {flexDirection: 'row-reverse'}
             : {flexDirection: 'row'}
         }
       >
         <motion.div layout variants={item} className={classes.rootItem}>
-          <DropDownOriginKey handleKeyChange={handleKeyChange} />
+          <DropDownCurrentKey />
         </motion.div>
 
         <motion.div layout variants={item} className={classes.rootItem}>
           <DropDownToKey
-            currentKey={currentKey}
+            currentKey={currentKeyRedux}
             onlyShowRecommended={onlyShowRecommended}
-            switchFromKey={switchFromKey}
+            switchFromKey={switchFromKeyRedux}
           />
         </motion.div>
       </motion.div>
@@ -133,4 +137,4 @@ const SongKey = () => {
   );
 };
 
-export default SongKey;
+export default TransitionKey;
