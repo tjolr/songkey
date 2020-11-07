@@ -17,7 +17,7 @@ const useStyles = makeStyles((theme: Theme) =>
   })
 );
 
-const DropDownToKey = (props: any) => {
+const MatchingKeysList = (props: any) => {
   const classes = useStyles();
 
   const [songKeysList, setSongKeysList] = useState<SongKey[]>([]);
@@ -26,6 +26,9 @@ const DropDownToKey = (props: any) => {
   );
   const switchFromKeyRedux = useSelector(
     state => state.transitionKeyReducer.switchFromKey
+  );
+  const onlyShowRecommendedRedux = useSelector(
+    state => state.transitionKeyReducer.onlyShowRecommended
   );
 
   const keyRowControls = useAnimation();
@@ -93,7 +96,7 @@ const DropDownToKey = (props: any) => {
       >
         {songKeysList
           .filter(songKey =>
-            props.onlyShowRecommended
+            onlyShowRecommendedRedux
               ? songKey.match !== TransitionMatch.Unrecommended
               : songKey
           )
@@ -108,4 +111,4 @@ const DropDownToKey = (props: any) => {
     </AnimatePresence>
   );
 };
-export default DropDownToKey;
+export default MatchingKeysList;
