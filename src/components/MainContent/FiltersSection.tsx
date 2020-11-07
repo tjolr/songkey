@@ -3,6 +3,8 @@ import {Theme, createStyles, makeStyles} from '@material-ui/core/styles';
 import {Typography} from '@material-ui/core';
 import Switch from '@material-ui/core/Switch';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
+import {useSelector, useDispatch} from 'react-redux';
+import {updateOnlyShowRecommended} from '../../redux/actions';
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -18,9 +20,14 @@ const useStyles = makeStyles((theme: Theme) =>
 
 const FiltersSection = (props: any) => {
   const classes = useStyles();
+  const dispatch = useDispatch();
+
+  const onlyShowRecommendedRedux = useSelector(
+    state => state.transitionKeyReducer.onlyShowRecommended
+  );
 
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    props.handleShowRecommendedChange(event.target.checked);
+    dispatch(updateOnlyShowRecommended(event.target.checked));
   };
 
   return (
@@ -34,7 +41,7 @@ const FiltersSection = (props: any) => {
       <FormControlLabel
         control={
           <Switch
-            checked={props.onlyShowRecommended}
+            checked={onlyShowRecommendedRedux}
             onChange={handleChange}
             name="onlyRecommended"
             inputProps={{'aria-label': 'secondary checkbox'}}

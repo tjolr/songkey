@@ -3,7 +3,7 @@ import {motion, AnimatePresence, AnimateSharedLayout} from 'framer-motion';
 import {Typography} from '@material-ui/core';
 import DropDownCurrentKey from './CurrentKeySection/DropDown.CurrentKey';
 import {Theme, createStyles, makeStyles} from '@material-ui/core/styles';
-import DropDownToKey from './MatchingKeysSection/List.MatchingKeys';
+import MatchingKeysList from './MatchingKeysSection/List.MatchingKeys';
 import FiltersSection from '../FiltersSection';
 import Icon from '@material-ui/core/Icon';
 import {list, item} from '../../../animations/animations';
@@ -66,12 +66,7 @@ const TransitionKey = () => {
     state => state.transitionKeyReducer.currentKey
   );
 
-  const [onlyShowRecommended, setOnlyShowRecommended] = useState(false);
   const [toggleButtonRotate, setToggleButtonRotate] = useState(0);
-
-  const handleShowRecommendedChange = (recommended: boolean): void => {
-    setOnlyShowRecommended(recommended);
-  };
 
   const handleSwitchFromKey = (): void => {
     dispatch(updateSwitchFromKey(!switchFromKeyRedux));
@@ -114,9 +109,8 @@ const TransitionKey = () => {
         </motion.div>
 
         <motion.div layout variants={item} className={classes.rootItem}>
-          <DropDownToKey
+          <MatchingKeysList
             currentKey={currentKeyRedux}
-            onlyShowRecommended={onlyShowRecommended}
             switchFromKey={switchFromKeyRedux}
           />
         </motion.div>
@@ -128,10 +122,7 @@ const TransitionKey = () => {
         transition={{delay: 1}}
         className={classes.filters}
       >
-        <FiltersSection
-          onlyShowRecommended={onlyShowRecommended}
-          handleShowRecommendedChange={handleShowRecommendedChange}
-        />
+        <FiltersSection />
       </motion.div>
     </div>
   );

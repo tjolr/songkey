@@ -14,7 +14,7 @@ import useMediaQuery from '@material-ui/core/useMediaQuery';
 import TransitionDetails from './Dialog.TransitionDetails';
 import Icon from '@material-ui/core/Icon';
 import {useIconStyles, responsiveIcon} from '../../../../../styles/generic';
-import MoreVertIcon from '@material-ui/icons/MoreVert';
+import {useKeyMatchStyles} from '../../../../../styles/keyMatchColors';
 import MoreHorizIcon from '@material-ui/icons/MoreHoriz';
 
 const useStyles = makeStyles((theme: Theme) =>
@@ -23,7 +23,7 @@ const useStyles = makeStyles((theme: Theme) =>
       display: 'flex',
       alignItems: 'center',
       justifyContent: 'space-evenly',
-      border: '2px solid',
+      border: 'none',
       borderRadius: '6px',
       marginBottom: theme.spacing(0.5),
       marginTop: theme.spacing(0.5),
@@ -57,28 +57,13 @@ const useStyles = makeStyles((theme: Theme) =>
     icon: {
       fontSize: '16px',
     },
-    Unrecommended: {
-      borderColor: fade(red[500], 0),
-      backgroundColor: fade(red[500], 0.2),
-    },
-    Tricky: {
-      borderColor: fade(yellow[400], 0),
-      backgroundColor: fade(yellow[400], 0.2),
-    },
-    Noticeable: {
-      borderColor: fade(blue[400], 0),
-      backgroundColor: fade(blue[400], 0.2),
-    },
-    Smooth: {
-      borderColor: fade(green[400], 0),
-      backgroundColor: fade(green[300], 0.2),
-    },
   })
 );
 
 const ToKeyRow = (props: any) => {
   const classes = useStyles();
   const iconClasses = useIconStyles();
+  const keyMatchClasses = useKeyMatchStyles();
   const theme = useTheme();
   const isMobile = theme.breakpoints.down('sm');
 
@@ -97,12 +82,12 @@ const ToKeyRow = (props: any) => {
       className={clsx(
         classes.root,
         props.songKey.match === TransitionMatch.Smooth
-          ? classes.Smooth
+          ? keyMatchClasses.SmoothBackgroundColor
           : props.songKey.match === TransitionMatch.Noticeable
-          ? classes.Noticeable
+          ? keyMatchClasses.NoticeableBackgroundColor
           : props.songKey.match === TransitionMatch.Tricky
-          ? classes.Tricky
-          : classes.Unrecommended
+          ? keyMatchClasses.TrickyBackgroundColor
+          : keyMatchClasses.UnrecommendedBackgroundColor
       )}
     >
       <div className={clsx(classes.item, classes.keyNumberBox)}>
@@ -117,7 +102,7 @@ const ToKeyRow = (props: any) => {
       <TransitionDetails
         open={detailOpen}
         handleDetailClose={handleDetailClose}
-        match={props.songKey.match}
+        songKey={props.songKey}
       />
       <IconButton onClick={handleDetailOpen} className={iconClasses.iconButton}>
         <MoreHorizIcon

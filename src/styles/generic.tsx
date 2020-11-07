@@ -25,9 +25,24 @@ export const useIconStyles = makeStyles((theme: Theme) =>
   })
 );
 
+export const useflexBoxStyles = makeStyles(() =>
+  createStyles({
+    parentVerAlignCenterChildren: {
+      display: 'flex',
+      alignItems: 'center',
+    },
+    parentHorVerAlignCenterChilren: {
+      display: 'flex',
+      alignItems: 'center',
+      justifyContent: 'center',
+    },
+  })
+);
+
 export const responsiveIcon = {
   xs: '16px',
   sm: '20px',
   md: '24px',
-  xl: '28px',
+  lg: '28px',
+  xl: '32px',
 };
