@@ -1,4 +1,3 @@
-import React from 'react';
 import {GroupByTypes} from '../redux/reducers/transitionKey.reducer';
 
 export interface SongKey {

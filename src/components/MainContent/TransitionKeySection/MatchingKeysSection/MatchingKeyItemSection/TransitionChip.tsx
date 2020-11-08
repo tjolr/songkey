@@ -1,9 +1,7 @@
 import React from 'react';
-import Icon from '@material-ui/core/Icon';
 import {Theme, createStyles, makeStyles} from '@material-ui/core/styles';
 import {TransitionMatch} from '../../../../../services/SongKey.service';
 import {Typography, TypographyVariant, useMediaQuery} from '@material-ui/core';
-import {red, yellow, blue, green} from '@material-ui/core/colors';
 import clsx from 'clsx';
 import Grid from '@material-ui/core/Grid';
 import {useTheme} from '@material-ui/core/styles';

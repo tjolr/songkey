@@ -1,7 +1,6 @@
 import React from 'react';
 import {Theme, createStyles, makeStyles} from '@material-ui/core/styles';
 import {motion} from 'framer-motion';
-import {Typography} from '@material-ui/core';
 import TransitionKey from './TransitionKeySection/TransitionKey';
 
 const useStyles = makeStyles((theme: Theme) =>

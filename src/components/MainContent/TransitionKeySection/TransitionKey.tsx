@@ -1,15 +1,11 @@
-import React, {useState} from 'react';
+import React from 'react';
 import {motion} from 'framer-motion';
-import {Typography} from '@material-ui/core';
 import DropDownCurrentKey from './CurrentKeySection/DropDown.CurrentKey';
 import {Theme, createStyles, makeStyles} from '@material-ui/core/styles';
 import MatchingKeysList from './MatchingKeysSection/List.MatchingKeys';
 import FilterSection from '../FilterSection/FilterSection';
-import Icon from '@material-ui/core/Icon';
 import {list, item} from '../../../animations/animations';
-import {useSelector, useDispatch} from 'react-redux';
-import {updateSwitchFromKey} from '../../../redux/actions';
-import SwapHorizIcon from '@material-ui/icons/SwapHoriz';
+import {useSelector} from 'react-redux';
 import HeaderSection from './HeaderSection';
 
 const useStyles = makeStyles((theme: Theme) =>
@@ -64,20 +60,13 @@ const useStyles = makeStyles((theme: Theme) =>
 
 const TransitionKey = () => {
   const classes = useStyles();
-  const dispatch = useDispatch();
+
   const switchFromKeyRedux = useSelector(
     state => state.transitionKeyReducer.switchFromKey
   );
   const currentKeyRedux = useSelector(
     state => state.transitionKeyReducer.currentKey
   );
-
-  const [toggleButtonRotate, setToggleButtonRotate] = useState(0);
-
-  const handleSwitchFromKey = (): void => {
-    dispatch(updateSwitchFromKey(!switchFromKeyRedux));
-    setToggleButtonRotate(toggleButtonRotate + 180);
-  };
 
   return (
     <div>
