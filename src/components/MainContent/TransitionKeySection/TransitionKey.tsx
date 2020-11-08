@@ -1,22 +1,28 @@
-import React, {useState, useEffect} from 'react';
-import {motion, AnimatePresence, AnimateSharedLayout} from 'framer-motion';
+import React, {useState} from 'react';
+import {motion} from 'framer-motion';
 import {Typography} from '@material-ui/core';
 import DropDownCurrentKey from './CurrentKeySection/DropDown.CurrentKey';
 import {Theme, createStyles, makeStyles} from '@material-ui/core/styles';
 import MatchingKeysList from './MatchingKeysSection/List.MatchingKeys';
-import FiltersSection from '../FiltersSection';
+import FilterSection from '../FilterSection/FilterSection';
 import Icon from '@material-ui/core/Icon';
 import {list, item} from '../../../animations/animations';
 import {useSelector, useDispatch} from 'react-redux';
 import {updateSwitchFromKey} from '../../../redux/actions';
 import SwapHorizIcon from '@material-ui/icons/SwapHoriz';
+import HeaderSection from './HeaderSection';
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
     root: {
       display: 'flex',
       alignItems: 'center',
-      minHeight: '40vh',
+      [theme.breakpoints.down('sm')]: {
+        height: 'auto',
+      },
+      [theme.breakpoints.up('md')]: {
+        height: 'auto',
+      },
     },
     rootItem: {
       flex: 1,
@@ -75,24 +81,7 @@ const TransitionKey = () => {
 
   return (
     <div>
-      <div className={classes.titles}>
-        <Typography variant="subtitle1" className={classes.titleItem}>
-          From key:
-        </Typography>
-        <motion.div
-          whileHover={{scale: 1.2}}
-          whileTap={{scale: 0.8}}
-          animate={{rotate: toggleButtonRotate, opacity: 1}}
-          transition={{duration: 0.3}}
-          className={classes.switchIcon}
-          onClick={handleSwitchFromKey}
-        >
-          <SwapHorizIcon />
-        </motion.div>
-        <Typography variant="subtitle1" className={classes.titleItem}>
-          To key:
-        </Typography>
-      </div>
+      <HeaderSection />
       <motion.div
         initial="hidden"
         animate="visible"
@@ -122,7 +111,7 @@ const TransitionKey = () => {
         transition={{delay: 1}}
         className={classes.filters}
       >
-        <FiltersSection />
+        <FilterSection />
       </motion.div>
     </div>
   );
