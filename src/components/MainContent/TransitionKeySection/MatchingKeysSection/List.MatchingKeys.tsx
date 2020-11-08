@@ -86,10 +86,29 @@ const MatchingKeysList = (props: any) => {
       transition: {duration: 0.5},
     });
   };
+
   useEffect(() => {
     animSwitchFromKey();
     fetchNewSongKeys(animSwitchFromKeyExitTimeMS);
   }, [switchFromKeyRedux]);
+
+  const animOnlyShowRecommended = async () => {
+    await keyRowControls.set({
+      opacity: 0,
+      scale: 0.8,
+      rotateY: -40,
+    });
+    await keyRowControls.start({
+      opacity: 1,
+      scale: 1,
+      rotateY: 0,
+      transition: {duration: 0.4},
+    });
+  };
+
+  useEffect(() => {
+    animOnlyShowRecommended();
+  }, [onlyShowRecommendedRedux]);
 
   return (
     <AnimatePresence exitBeforeEnter>

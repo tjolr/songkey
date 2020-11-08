@@ -1,21 +1,15 @@
 import React, {useState} from 'react';
 import {motion} from 'framer-motion';
 import {Theme, createStyles, makeStyles} from '@material-ui/core/styles';
-
 import {Typography, IconButton} from '@material-ui/core';
 import TransitionChip from './TransitionChip';
-import {red, yellow, blue, green} from '@material-ui/core/colors';
 import clsx from 'clsx';
 import {TransitionMatch} from '../../../../../services/SongKey.service';
-import {fade} from '@material-ui/core/styles/colorManipulator';
-import Grid from '@material-ui/core/Grid';
-import {useTheme} from '@material-ui/core/styles';
-import useMediaQuery from '@material-ui/core/useMediaQuery';
 import TransitionDetails from './Dialog.TransitionDetails';
-import Icon from '@material-ui/core/Icon';
 import {useIconStyles, responsiveIcon} from '../../../../../styles/generic';
 import {useKeyMatchStyles} from '../../../../../styles/keyMatchColors';
 import MoreHorizIcon from '@material-ui/icons/MoreHoriz';
+import {useSelector} from 'react-redux';
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -25,17 +19,35 @@ const useStyles = makeStyles((theme: Theme) =>
       justifyContent: 'space-evenly',
       border: 'none',
       borderRadius: '6px',
+    },
+    rootSize: {
       marginBottom: theme.spacing(0.5),
       marginTop: theme.spacing(0.5),
       [theme.breakpoints.down('sm')]: {
-        paddingLeft: theme.spacing(0.2),
-        paddingRight: theme.spacing(0.2),
         paddingTop: theme.spacing(0.3),
         paddingBottom: theme.spacing(0.3),
+        paddingLeft: theme.spacing(0.25),
+        paddingRight: theme.spacing(0.25),
       },
       [theme.breakpoints.up('md')]: {
         paddingTop: theme.spacing(0.5),
         paddingBottom: theme.spacing(0.5),
+        paddingLeft: theme.spacing(1),
+        paddingRight: theme.spacing(1),
+      },
+    },
+    rootSizeExpand: {
+      marginBottom: theme.spacing(1.75),
+      marginTop: theme.spacing(1.75),
+      [theme.breakpoints.down('sm')]: {
+        paddingTop: theme.spacing(1.05),
+        paddingBottom: theme.spacing(1.05),
+        paddingLeft: theme.spacing(0.25),
+        paddingRight: theme.spacing(0.25),
+      },
+      [theme.breakpoints.up('md')]: {
+        paddingTop: theme.spacing(1.5),
+        paddingBottom: theme.spacing(1.5),
         paddingLeft: theme.spacing(1),
         paddingRight: theme.spacing(1),
       },
@@ -65,6 +77,10 @@ const MatchingKeyItem = (props: any) => {
   const iconClasses = useIconStyles();
   const keyMatchClasses = useKeyMatchStyles();
 
+  const onlyShowRecommendedRedux = useSelector(
+    state => state.transitionKeyReducer.onlyShowRecommended
+  );
+
   const [detailOpen, setDetailOpen] = useState(false);
 
   const handleDetailOpen = () => {
@@ -79,6 +95,7 @@ const MatchingKeyItem = (props: any) => {
     <motion.div
       className={clsx(
         classes.root,
+        onlyShowRecommendedRedux ? classes.rootSizeExpand : classes.rootSize,
         props.songKey.match === TransitionMatch.Smooth
           ? keyMatchClasses.SmoothBackgroundColor
           : props.songKey.match === TransitionMatch.Noticeable
