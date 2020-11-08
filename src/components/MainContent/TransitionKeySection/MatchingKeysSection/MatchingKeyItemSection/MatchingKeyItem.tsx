@@ -60,12 +60,10 @@ const useStyles = makeStyles((theme: Theme) =>
   })
 );
 
-const ToKeyRow = (props: any) => {
+const MatchingKeyItem = (props: any) => {
   const classes = useStyles();
   const iconClasses = useIconStyles();
   const keyMatchClasses = useKeyMatchStyles();
-  const theme = useTheme();
-  const isMobile = theme.breakpoints.down('sm');
 
   const [detailOpen, setDetailOpen] = useState(false);
 
@@ -107,12 +105,8 @@ const ToKeyRow = (props: any) => {
       <IconButton onClick={handleDetailOpen} className={iconClasses.iconButton}>
         <MoreHorizIcon
           className={classes.icon}
-          style={{fontSize: isMobile ? responsiveIcon.sm : responsiveIcon.md}}
+          style={{fontSize: responsiveIcon.sm}}
         />
-        {/*  <Icon
-        >
-          insights
-        </Icon> */}
       </IconButton>
 
       <div
@@ -125,4 +119,4 @@ const ToKeyRow = (props: any) => {
   );
 };
 
-export default ToKeyRow;
+export default MatchingKeyItem;

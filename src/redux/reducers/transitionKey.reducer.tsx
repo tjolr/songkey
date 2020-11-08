@@ -2,12 +2,25 @@ import {
   UPDATE_CURRENT_KEY,
   UPDATE_SWITCH_FROM_KEY,
   UPDATE_ONLY_SHOW_RECOMMENDED,
+  UPDATE_GROUP_BY,
 } from '../actionTypes';
 
-export const initKeyState = {
+export enum GroupByTypes {
+  Notes = 'notes',
+  Match = 'match',
+}
+interface keyState {
+  currentKey: string;
+  switchFromKey: boolean;
+  onlyShowRecommended: boolean;
+  groupBy: GroupByTypes;
+}
+
+export const initKeyState: keyState = {
   currentKey: 'C',
   switchFromKey: false,
   onlyShowRecommended: false,
+  groupBy: GroupByTypes.Notes,
 };
 
 const transitionKeyReducer = (state = initKeyState, action) => {
@@ -26,6 +39,11 @@ const transitionKeyReducer = (state = initKeyState, action) => {
       return {
         ...state,
         onlyShowRecommended: action.payload.content,
+      };
+    case UPDATE_GROUP_BY:
+      return {
+        ...state,
+        groupBy: action.payload.content,
       };
     default:
       return state;

@@ -1,6 +1,6 @@
 import React, {useEffect, useState} from 'react';
 import {createStyles, makeStyles, Theme} from '@material-ui/core/styles';
-import ToKeyRow from './MatchingKeyItemSection/MatchingKeyItem';
+import MatchingKeyItem from './MatchingKeyItemSection/MatchingKeyItem';
 import {
   getSongKeysListFromKey,
   SongKey,
@@ -8,6 +8,7 @@ import {
 } from '../../../../services/SongKey.service';
 import {motion, AnimatePresence, useAnimation} from 'framer-motion';
 import {useSelector} from 'react-redux';
+import {GroupByTypes} from '../../../../redux/reducers/transitionKey.reducer';
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -29,6 +30,9 @@ const MatchingKeysList = (props: any) => {
   );
   const onlyShowRecommendedRedux = useSelector(
     state => state.transitionKeyReducer.onlyShowRecommended
+  );
+  const groupByRedux = useSelector<GroupByTypes>(
+    state => state.transitionKeyReducer.groupBy
   );
 
   const keyRowControls = useAnimation();
@@ -54,7 +58,8 @@ const MatchingKeysList = (props: any) => {
   const fetchNewSongKeys = (animExitTimeMS: number) => {
     const songList = getSongKeysListFromKey(
       currentKeyRedux,
-      switchFromKeyRedux
+      switchFromKeyRedux,
+      groupByRedux
     );
     setTimeout(() => {
       setSongKeysList(songList);
@@ -64,7 +69,7 @@ const MatchingKeysList = (props: any) => {
   useEffect(() => {
     animRowKeyChange();
     fetchNewSongKeys(animRowKeyExitTimeMS);
-  }, [currentKeyRedux]);
+  }, [currentKeyRedux, groupByRedux]);
 
   const animSwitchFromKey = async () => {
     await keyRowControls.start({
@@ -101,7 +106,7 @@ const MatchingKeysList = (props: any) => {
               : songKey
           )
           .map(songKey => (
-            <ToKeyRow
+            <MatchingKeyItem
               key={Math.random()}
               songKey={songKey}
               switchFromKey={props.switchFromKey}
