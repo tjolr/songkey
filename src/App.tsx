@@ -1,32 +1,39 @@
 import React from 'react';
 import firebase from './fire';
-import {ThemeProvider} from '@material-ui/core/styles';
+import { ThemeProvider } from '@material-ui/core/styles';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import theme from './theme';
 import MenuAppBar from './components/MenuAppBar/MenuAppBar';
-import {Container} from '@material-ui/core';
+import { Container } from '@material-ui/core';
 import MainContainer from './components/MainContent/MainContainer';
+import { Switch, Route, useLocation } from 'react-router-dom';
+import { AnimatePresence } from 'framer-motion';
+import HomePage from './pages/HomePage';
+import { Routes } from './pages/routes';
 
 const App = () => {
   firebase.analytics().logEvent('App tsx rendered');
+
+  const location = useLocation();
+
   return (
-    <div
-      style={{
-        background: 'url(https://wallpapercave.com/wp/wp214076.jpg)',
-        backgroundOrigin: 'center',
-        backgroundSize: 'cover',
-        minHeight: '100vh',
-        height: '100%',
-      }}
-    >
-      <ThemeProvider theme={theme}>
-        <CssBaseline />
-        <MenuAppBar />
-        <Container>
-          <MainContainer />
-        </Container>
-      </ThemeProvider>
-    </div>
+    <ThemeProvider theme={theme}>
+      <CssBaseline />
+      <MenuAppBar />
+
+      <Container>
+        <AnimatePresence exitBeforeEnter>
+          <Switch location={location} key={location.pathname}>
+            <Route path={Routes.Transitionkey}>
+              <MainContainer />
+            </Route>
+            <Route path={Routes.Home}>
+              <HomePage />
+            </Route>
+          </Switch>
+        </AnimatePresence>
+      </Container>
+    </ThemeProvider>
   );
 };
 
