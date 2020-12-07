@@ -1,11 +1,14 @@
 import React from 'react';
-import {motion} from 'framer-motion';
+import { motion, AnimateSharedLayout } from 'framer-motion';
 import DropDownCurrentKey from './CurrentKeySection/DropDown.CurrentKey';
-import {Theme, createStyles, makeStyles} from '@material-ui/core/styles';
+import { Theme, createStyles, makeStyles } from '@material-ui/core/styles';
 import MatchingKeysList from './MatchingKeysSection/List.MatchingKeys';
 import FilterSection from '../FilterSection/FilterSection';
-import {list, item} from '../../../animations/animations';
-import {useSelector} from 'react-redux';
+import {
+  delayChildrenParent,
+  delayChildrenChild,
+} from '../../../animations/animations';
+import { useSelector } from 'react-redux';
 import HeaderSection from './HeaderSection';
 
 const useStyles = makeStyles((theme: Theme) =>
@@ -64,44 +67,30 @@ const TransitionKey = () => {
   const switchFromKeyRedux = useSelector(
     state => state.transitionKeyReducer.switchFromKey
   );
-  const currentKeyRedux = useSelector(
-    state => state.transitionKeyReducer.currentKey
-  );
 
   return (
     <div>
       <HeaderSection />
-      <motion.div
-        initial="hidden"
-        animate="visible"
-        variants={list}
+      <div
         className={classes.root}
         style={
           switchFromKeyRedux
-            ? {flexDirection: 'row-reverse'}
-            : {flexDirection: 'row'}
+            ? { flexDirection: 'row-reverse' }
+            : { flexDirection: 'row' }
         }
       >
-        <motion.div layout variants={item} className={classes.rootItem}>
+        <motion.div layout className={classes.rootItem}>
           <DropDownCurrentKey />
         </motion.div>
 
-        <motion.div layout variants={item} className={classes.rootItem}>
-          <MatchingKeysList
-            currentKey={currentKeyRedux}
-            switchFromKey={switchFromKeyRedux}
-          />
+        <motion.div layout className={classes.rootItem}>
+          <MatchingKeysList />
         </motion.div>
-      </motion.div>
+      </div>
 
-      <motion.div
-        initial={{opacity: 0, y: -10}}
-        animate={{opacity: 1, y: 0}}
-        transition={{delay: 1}}
-        className={classes.filters}
-      >
+      <div className={classes.filters}>
         <FilterSection />
-      </motion.div>
+      </div>
     </div>
   );
 };

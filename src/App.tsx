@@ -8,7 +8,7 @@ import { Container } from '@material-ui/core';
 import MainContainer from './components/MainContent/MainContainer';
 import { Switch, Route, useLocation } from 'react-router-dom';
 import { AnimatePresence } from 'framer-motion';
-import HomePage from './pages/HomePage';
+import HomePage from './pages/HomePage/HomePage';
 import { Routes } from './pages/routes';
 
 const App = () => {

@@ -1,5 +1,10 @@
-import {Theme, createStyles, makeStyles, fade} from '@material-ui/core/styles';
-import {red, yellow, blue, green} from '@material-ui/core/colors';
+import {
+  Theme,
+  createStyles,
+  makeStyles,
+  fade,
+} from '@material-ui/core/styles';
+import { red, yellow, blue, green } from '@material-ui/core/colors';
 
 export const useKeyMatchStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -26,6 +31,18 @@ export const useKeyMatchStyles = makeStyles((theme: Theme) =>
     },
     SmoothBackgroundColor: {
       backgroundColor: fade(green[300], 0.2),
+    },
+    DisplayUnrecommendedBackgroundColor: {
+      backgroundColor: fade(red[500], 0.25),
+    },
+    DisplayTrickyBackgroundColor: {
+      backgroundColor: fade(yellow[400], 0.25),
+    },
+    DisplayNoticeableBackgroundColor: {
+      backgroundColor: fade(blue[400], 0.25),
+    },
+    DisplaySmoothBackgroundColor: {
+      backgroundColor: fade(green[300], 0.25),
     },
   })
 );

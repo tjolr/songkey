@@ -1,4 +1,4 @@
-import {GroupByTypes} from '../redux/reducers/transitionKey.reducer';
+import { GroupByTypes } from '../redux/reducers/transitionKey.reducer';
 
 export interface SongKey {
   songKey: string;
@@ -14,7 +14,7 @@ export enum TransitionMatch {
   Unrecommended = 'Avoid',
 }
 
-enum TransitionMatchIndex {
+export enum TransitionMatchIndex {
   Smooth = 0,
   Noticeable = 1,
   Tricky = 2,
@@ -37,33 +37,33 @@ const notesList: string[] = [
 ];
 
 const chordNumberIndexListToKey: any[] = [
-  {number: 'I', index: 0},
-  {number: 'bI', index: 1},
-  {number: 'II', index: 2},
-  {number: 'bIII', index: 3},
-  {number: 'III', index: 4},
-  {number: 'IV', index: 5},
-  {number: 'bV', index: 6},
-  {number: 'V', index: 7},
-  {number: 'bVI', index: 8},
-  {number: 'VI', index: 9},
-  {number: 'bVII', index: 10},
-  {number: 'VII', index: 11},
+  { number: 'I', index: 0 },
+  { number: 'bI', index: 1 },
+  { number: 'II', index: 2 },
+  { number: 'bIII', index: 3 },
+  { number: 'III', index: 4 },
+  { number: 'IV', index: 5 },
+  { number: 'bV', index: 6 },
+  { number: 'V', index: 7 },
+  { number: 'bVI', index: 8 },
+  { number: 'VI', index: 9 },
+  { number: 'bVII', index: 10 },
+  { number: 'VII', index: 11 },
 ];
 
 const chordNumberIndexListFromKey: any[] = [
-  {number: 'I', index: 0},
-  {number: 'bI', index: 11},
-  {number: 'II', index: 10},
-  {number: 'bIII', index: 9},
-  {number: 'III', index: 8},
-  {number: 'IV', index: 7},
-  {number: 'bV', index: 6},
-  {number: 'V', index: 5},
-  {number: 'bVI', index: 4},
-  {number: 'VI', index: 3},
-  {number: 'bVII', index: 2},
-  {number: 'VII', index: 1},
+  { number: 'I', index: 0 },
+  { number: 'bI', index: 11 },
+  { number: 'II', index: 10 },
+  { number: 'bIII', index: 9 },
+  { number: 'III', index: 8 },
+  { number: 'IV', index: 7 },
+  { number: 'bV', index: 6 },
+  { number: 'V', index: 5 },
+  { number: 'bVI', index: 4 },
+  { number: 'VI', index: 3 },
+  { number: 'bVII', index: 2 },
+  { number: 'VII', index: 1 },
 ];
 
 const numberStringToValue = {

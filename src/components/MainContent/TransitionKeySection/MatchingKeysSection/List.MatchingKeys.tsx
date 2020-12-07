@@ -1,14 +1,14 @@
-import React, {useEffect, useState} from 'react';
-import {createStyles, makeStyles, Theme} from '@material-ui/core/styles';
+import React, { useEffect, useState, useRef, useLayoutEffect } from 'react';
+import { createStyles, makeStyles, Theme } from '@material-ui/core/styles';
 import MatchingKeyItem from './MatchingKeyItemSection/MatchingKeyItem';
 import {
   getSongKeysListFromKey,
   SongKey,
   TransitionMatch,
 } from '../../../../services/SongKey.service';
-import {motion, AnimatePresence, useAnimation} from 'framer-motion';
-import {useSelector} from 'react-redux';
-import {GroupByTypes} from '../../../../redux/reducers/transitionKey.reducer';
+import { motion, AnimatePresence, useAnimation } from 'framer-motion';
+import { useSelector } from 'react-redux';
+import { GroupByTypes } from '../../../../redux/reducers/transitionKey.reducer';
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -18,7 +18,7 @@ const useStyles = makeStyles((theme: Theme) =>
   })
 );
 
-const MatchingKeysList = (props: any) => {
+const MatchingKeysList = () => {
   const classes = useStyles();
 
   const [songKeysList, setSongKeysList] = useState<SongKey[]>([]);
@@ -39,21 +39,7 @@ const MatchingKeysList = (props: any) => {
   const animRowKeyExitTimeMS = 400;
   const animSwitchFromKeyExitTimeMS = 150;
 
-  const animRowKeyChange = async () => {
-    await keyRowControls.start({
-      opacity: 0,
-      transition: {duration: animRowKeyExitTimeMS / 1000},
-    });
-    await keyRowControls.set({
-      opacity: 0,
-      y: 20,
-    });
-    await keyRowControls.start({
-      opacity: 1,
-      y: 0,
-      transition: {duration: 0.25},
-    });
-  };
+  const firstUpdate = useRef(true);
 
   const fetchNewSongKeys = (animExitTimeMS: number) => {
     const songList = getSongKeysListFromKey(
@@ -65,17 +51,29 @@ const MatchingKeysList = (props: any) => {
       setSongKeysList(songList);
     }, animExitTimeMS);
   };
-
-  useEffect(() => {
-    animRowKeyChange();
-    fetchNewSongKeys(animRowKeyExitTimeMS);
-  }, [currentKeyRedux, groupByRedux]);
+  const animRowKeyChange = async () => {
+    console.log('animRowKeyChange');
+    await keyRowControls.start({
+      opacity: 0,
+      transition: { duration: animRowKeyExitTimeMS / 1000 },
+    });
+    await keyRowControls.set({
+      opacity: 0,
+      y: 20,
+    });
+    await keyRowControls.start({
+      opacity: 1,
+      y: 0,
+      transition: { duration: 0.25 },
+    });
+  };
 
   const animSwitchFromKey = async () => {
+    console.log('animSwitchFromKey');
     await keyRowControls.start({
       opacity: 0,
       scale: 0,
-      transition: {duration: animSwitchFromKeyExitTimeMS / 1000},
+      transition: { duration: animSwitchFromKeyExitTimeMS / 1000 },
     });
     await keyRowControls.set({
       scale: 0,
@@ -83,16 +81,12 @@ const MatchingKeysList = (props: any) => {
     await keyRowControls.start({
       opacity: 1,
       scale: 1,
-      transition: {duration: 0.5},
+      transition: { duration: 0.5 },
     });
   };
 
-  useEffect(() => {
-    animSwitchFromKey();
-    fetchNewSongKeys(animSwitchFromKeyExitTimeMS);
-  }, [switchFromKeyRedux]);
-
   const animOnlyShowRecommended = async () => {
+    console.log('animOnlyShowRecommended');
     await keyRowControls.set({
       opacity: 0,
       scale: 0.8,
@@ -102,9 +96,22 @@ const MatchingKeysList = (props: any) => {
       opacity: 1,
       scale: 1,
       rotateY: 0,
-      transition: {duration: 0.4},
+      transition: { duration: 0.4 },
     });
   };
+
+  useEffect(() => {
+    fetchNewSongKeys(0);
+  }, []);
+  useEffect(() => {
+    animRowKeyChange();
+    fetchNewSongKeys(animRowKeyExitTimeMS);
+  }, [currentKeyRedux, groupByRedux]);
+
+  useEffect(() => {
+    animSwitchFromKey();
+    fetchNewSongKeys(animSwitchFromKeyExitTimeMS);
+  }, [switchFromKeyRedux]);
 
   useEffect(() => {
     animOnlyShowRecommended();
@@ -112,24 +119,15 @@ const MatchingKeysList = (props: any) => {
 
   return (
     <AnimatePresence exitBeforeEnter>
-      <motion.div
-        layout
-        animate={keyRowControls}
-        className={classes.root}
-        exit={{opacity: 0}}
-      >
+      <motion.div animate={keyRowControls} className={classes.root}>
         {songKeysList
-          .filter(songKey =>
+          .filter((songKey: SongKey) =>
             onlyShowRecommendedRedux
               ? songKey.match !== TransitionMatch.Unrecommended
               : songKey
           )
-          .map(songKey => (
-            <MatchingKeyItem
-              key={Math.random()}
-              songKey={songKey}
-              switchFromKey={props.switchFromKey}
-            />
+          .map((songKey: SongKey, index: number) => (
+            <MatchingKeyItem key={index} songKey={songKey} />
           ))}
       </motion.div>
     </AnimatePresence>

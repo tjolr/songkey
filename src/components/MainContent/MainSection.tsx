@@ -35,13 +35,8 @@ export default function MainSection() {
   const classes = useStyles();
 
   return (
-    <motion.div
-      initial={{ opacity: 0 }}
-      animate={{ opacity: 1 }}
-      transition={{ duration: 0.2 }}
-      className={classes.root}
-    >
+    <div className={classes.root}>
       <TransitionKey />
-    </motion.div>
+    </div>
   );
 }

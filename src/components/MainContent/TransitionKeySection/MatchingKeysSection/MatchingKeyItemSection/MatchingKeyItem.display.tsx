@@ -22,10 +22,11 @@ const useStyles = makeStyles((theme: Theme) =>
       justifyContent: 'space-evenly',
       border: 'none',
       borderRadius: '6px',
+      boxShadow: `20px 40px 8px 3px ${theme.palette.backgroundColor.dark}`,
     },
     rootSize: {
-      marginBottom: theme.spacing(0.5),
-      marginTop: theme.spacing(0.5),
+      marginBottom: theme.spacing(1),
+      marginTop: theme.spacing(1),
       [theme.breakpoints.down('sm')]: {
         paddingTop: theme.spacing(0.3),
         paddingBottom: theme.spacing(0.3),
@@ -33,26 +34,11 @@ const useStyles = makeStyles((theme: Theme) =>
         paddingRight: theme.spacing(0.25),
       },
       [theme.breakpoints.up('md')]: {
-        paddingTop: theme.spacing(0.5),
-        paddingBottom: theme.spacing(0.5),
-        paddingLeft: theme.spacing(1),
-        paddingRight: theme.spacing(1),
-      },
-    },
-    rootSizeExpand: {
-      marginBottom: theme.spacing(1.75),
-      marginTop: theme.spacing(1.75),
-      [theme.breakpoints.down('sm')]: {
-        paddingTop: theme.spacing(1.05),
-        paddingBottom: theme.spacing(1.05),
-        paddingLeft: theme.spacing(0.25),
-        paddingRight: theme.spacing(0.25),
-      },
-      [theme.breakpoints.up('md')]: {
         paddingTop: theme.spacing(1.5),
         paddingBottom: theme.spacing(1.5),
-        paddingLeft: theme.spacing(1),
-        paddingRight: theme.spacing(1),
+        paddingLeft: theme.spacing(3),
+        paddingRight: theme.spacing(3),
+        width: theme.spacing(35),
       },
     },
     item: {
@@ -79,60 +65,33 @@ interface MatchingKeyItemProps {
   songKey: SongKey;
 }
 
-const MatchingKeyItem = ({ songKey }: MatchingKeyItemProps) => {
+const MatchingKeyItemDisplay = ({ songKey }: MatchingKeyItemProps) => {
   const classes = useStyles();
   const iconClasses = useIconStyles();
   const keyMatchClasses = useKeyMatchStyles();
-
-  const onlyShowRecommendedRedux = useSelector(
-    state => state.transitionKeyReducer.onlyShowRecommended
-  );
-
-  const [detailOpen, setDetailOpen] = useState(false);
-
-  const handleDetailOpen = () => {
-    setDetailOpen(true);
-  };
-
-  const handleDetailClose = () => {
-    setDetailOpen(false);
-  };
 
   return (
     <motion.div
       className={clsx(
         classes.root,
-        onlyShowRecommendedRedux ? classes.rootSizeExpand : classes.rootSize,
+        classes.rootSize,
         songKey.match === TransitionMatch.Smooth
-          ? keyMatchClasses.SmoothBackgroundColor
+          ? keyMatchClasses.DisplaySmoothBackgroundColor
           : songKey.match === TransitionMatch.Noticeable
-          ? keyMatchClasses.NoticeableBackgroundColor
+          ? keyMatchClasses.DisplayNoticeableBackgroundColor
           : songKey.match === TransitionMatch.Tricky
-          ? keyMatchClasses.TrickyBackgroundColor
-          : keyMatchClasses.UnrecommendedBackgroundColor
+          ? keyMatchClasses.DisplayTrickyBackgroundColor
+          : keyMatchClasses.DisplayUnrecommendedBackgroundColor
       )}
     >
       <div className={clsx(classes.item, classes.keyNumberBox)}>
         <div>
-          <Typography variant="body1">{songKey.songKey}</Typography>
+          <Typography variant="subtitle1">{songKey.songKey}</Typography>
         </div>
         <div>
-          <Typography variant="caption"> {songKey.number}</Typography>
+          <Typography variant="body2"> {songKey.number}</Typography>
         </div>
       </div>
-
-      <TransitionDetails
-        open={detailOpen}
-        handleDetailClose={handleDetailClose}
-        songKey={songKey}
-      />
-
-      <IconButton onClick={handleDetailOpen} className={iconClasses.iconButton}>
-        <MoreHorizIcon
-          className={classes.icon}
-          style={{ fontSize: responsiveIcon.sm }}
-        />
-      </IconButton>
 
       <div
         className={classes.item}
@@ -144,4 +103,4 @@ const MatchingKeyItem = ({ songKey }: MatchingKeyItemProps) => {
   );
 };
 
-export default MatchingKeyItem;
+export default MatchingKeyItemDisplay;
